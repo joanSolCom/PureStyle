@@ -25,9 +25,9 @@ class SpacyTree():
 		for idNode, iNode in self.node_dict.items():
 			depth = self.getNodeDepth(iNode)
 			iNode.depth = depth
-			print(iNode)
+			#print(iNode)
 
-		print(self)
+		#print(self)
 
 	def getWidthIterator(self, initNode = None):
 		
