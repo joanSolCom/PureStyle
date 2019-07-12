@@ -64,6 +64,9 @@ class SpacyTree():
 		self.maxWidth = self.getMaxWidth()
 		self.maxDepth = self.getMaxDepth()
 
+	def getFeatures(self):
+		return [self.maxWidth, self.maxDepth, self.ramificationFactor]
+
 	def getRamificationFactor(self, initNode = None):
 		if initNode:
 			it = self.getWidthIterator(initNode)

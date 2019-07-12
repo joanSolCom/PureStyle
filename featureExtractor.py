@@ -4,9 +4,8 @@ import numpy as np
 
 class FeatureExtractor:
 
-	def __init__(self, text):
+	def __init__(self, text, nlp):
 		self.raw = text
-		nlp = spacy.load('en_core_web_md')
 		doc = nlp(text)
 		self.doc = doc
 
@@ -16,7 +15,7 @@ class FeatureExtractor:
 			self.trees.append(iST)
 
 		self.getFeatureVectors()
-
+		self.getSentenceFeatures()
 
 	def getFeatureVectors(self):
 		self.lookup = LookUp()
@@ -58,6 +57,11 @@ class FeatureExtractor:
 		'''
 
 		self.features = textVector
+
+	def getSentenceFeatures(self):
+		self.sentenceFeatures = []
+		for tree in self.trees:
+			self.sentenceFeatures.append(tree.getFeatures())
 
 	def normalizeVector(self, vector):
 		morphKeys = ["Poss", "ConjType", "Degree", "Tense", "Person", "Aspect","VerbType" ,"VerbForm", "PunctType", "Number", "PronType"]
@@ -104,21 +108,21 @@ class LookUp:
 
 	def getPos(self, key):
 		if key not in self.indexPos:
-			randArray = np.random.uniform(-100,100,size=self.POS_DIMENSIONALITY)
+			randArray = np.random.uniform(-1,1,size=self.POS_DIMENSIONALITY)
 			self.indexPos[key] = randArray
 		
 		return self.indexPos[key]
 
 	def getDep(self, key):
 		if key not in self.indexDep:
-			randArray = np.random.uniform(200,400,size=self.DEP_DIMENSIONALITY)
+			randArray = np.random.uniform(-1,1,size=self.DEP_DIMENSIONALITY)
 			self.indexDep[key] = randArray
 		
 		return self.indexDep[key]
 
 	def getMorph(self, key):
 		if key not in self.indexMorph:
-			randArray = np.random.uniform(500,700,size=self.MORPH_DIMENSIONALITY)
+			randArray = np.random.uniform(-1,1,size=self.MORPH_DIMENSIONALITY)
 			self.indexMorph[key] = randArray
 		
 		return self.indexMorph[key]
@@ -126,5 +130,6 @@ class LookUp:
 
 
 if __name__ == '__main__':
+	nlp = spacy.load('en_core_web_md')
 	text = "Newman declared abruptly and firmly that he knew nothing about tables and chairs, and that he would accept, in the way of a lodging, with his eyes shut, anything that Tristram should offer him."
-	iF = FeatureExtractor(text)
+	iF = FeatureExtractor(text, nlp)
