@@ -47,6 +47,9 @@ class Dataset:
 				if len(instanceVectors) == self.maxLen:
 					break
 
+			if len(instanceVectors) < self.maxLen:
+				while len(instanceVectors) < self.maxLen:
+					instanceVectors.append(list(np.zeros(268)))
 			'''
 			nWords = len(instanceVectors)
 			if nWords > maxWords:
@@ -62,10 +65,9 @@ class Dataset:
 			fd.close()
 			print(i, "of", nTexts)
 
-		padded_vectors = pad_sequences(self.dataset)
 
 		fdOutLabels.close()
-		self.dataset = np.array(padded_vectors)
+		self.dataset = np.array(self.dataset)
 		#save feature vectors per text
 		np.save(pathVectors,self.dataset)
 
@@ -86,7 +88,6 @@ class Dataset:
 			self.labels[i] = int(label)
 
 		self.labelDict = eval(open(pathCorrespondence,"r").read())
-		print("HOLA")
 
 if __name__ == '__main__':
 	path = "/home/joan/Escritorio/Datasets/KaggleCompetition/clean_train/"
@@ -94,6 +95,6 @@ if __name__ == '__main__':
 	pathL = "/home/joan/repository/PURESTYLE/labels.txt"
 	pathC = "/home/joan/repository/PURESTYLE/labelCorrespondence.txt"
 
-	iD = Dataset()
+	#iD = Dataset()
 	#iD.createDataset(path, pathL, pathV, pathC)
-	iD.loadDataset(pathV, pathL, pathC)
+	#iD.loadDataset(pathV, pathL, pathC)
